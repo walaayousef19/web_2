@@ -1,0 +1,209 @@
+<html>
+    <head>
+    <style>	#di{margin-left:180px;}
+    body{background-image:url("Capture.PNG");
+	background-repeat:no repeat;
+	background-size:cover;}   
+   #img{margin-left:200px;
+		}
+		div button{
+		font-size:20;
+		border-raduis:30;
+		background:#DB7093;}
+	   #sp{color:#white;
+	   font-weight:bold;
+	   font-size:25;
+	   }
+			div button:hover{
+		background:#40E0D0;}
+			#asd
+            {
+                min-height: 100px;
+            }
+        table,tr,td
+        {
+            border: 1px solid black;
+			font-weight:bold;
+			color:8B0000;
+			margin-top:20;
+			margin-left:30;
+        }
+		#asd{
+		background-color:aqua;
+		width:36%;
+		}
+        </style>
+    </head>
+    <body>
+        <div id="di">
+		 
+<h1 style="color:8B0000;margin-left:140;">Learn The English Letters </h1>
+    <span id="sp">enter number of letters</span> 
+	<input id="inp" type="number" min=1 max=26 style="background:#DB7093;">
+        <button id="fff" >generate</button>
+         <button id="Result">Display</button>
+        <div id="d"> </div>
+          <div id="m"> </div>
+          <div id="imges" hidden="true"> 
+		  <image src="" id="img" width=240 height=260></div>
+            <div id="asd"></div>
+		  </div>
+<script src="jquery3.2.1.min.js"></script>
+        <script>
+		var c=0;
+            var di=document.getElementById("d");
+			var gen=document.getElementById("fff");
+            
+       function ran(max,min)
+            {
+                return Math.floor(Math.random()*(max-min+1)+min);
+                
+            }
+            
+      function pp(x){
+                di.innerHTML="";  
+                var arr=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'
+                        ,'Q','R','S','T','U','V','W','X','Y','Z'];
+                    for(var i=0;i<x;i++){                      
+                        var s=document.createElement("button");
+                     
+                          var s2=document.createTextNode(arr[ran(25,0)]);
+                                 
+                         s.appendChild(s2);
+                           di.appendChild(s);
+                          s.addEventListener("click",function(e)
+                                              { 
+											  var nameimg=e.target.textContent;
+											  document.getElementById("img").src ="images/"+nameimg+".jpg";
+											 document.getElementById("imges").removeAttribute("hidden");
+											 eventletter(e);
+											
+                         }   ); 
+}}
+
+              gen.addEventListener("click" ,function(e){
+           
+            var num1=document.getElementById("inp").value;
+             pp(num1);
+			  eventgen(e);
+            });
+        
+	   window.addEventListener("load",function(e){
+	   //alert("Welcome To Learning English Letters");
+	   eventload(e);
+	   });
+	   
+	   window.addEventListener("unload",function(e){
+	    alert("Bye!!");
+	      eventunload(e);
+		  });
+            
+            	
+			
+	  function eventload(e){
+		
+			   if(localStorage.getItem("load")){
+			  var arr2=JSON.parse(localStorage.getItem("load"));
+			   arr2.push({"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()});
+	        localStorage.setItem("load",JSON.stringify(arr2));
+			
+			}
+			else {
+			 var  arr=[{"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()}];
+	        localStorage.setItem("load",JSON.stringify(arr));
+			}
+
+		}
+			
+			
+			
+	 function eventunload(e){
+				   	 
+				
+			   if(localStorage.getItem("unload")){
+			  var arr2=JSON.parse(localStorage.getItem("unload"));
+			   arr2.push({"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()});
+	        localStorage.setItem("unload",JSON.stringify(arr2));
+			
+			}
+			else {
+			
+			  var arr=[{"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()}];
+	        localStorage.setItem("unload",JSON.stringify(arr));
+			}
+     }
+			
+			
+			
+	 function eventgen(e){
+			   if(localStorage.getItem("gen")){
+			   var arr2=JSON.parse(localStorage.getItem("gen"));
+			   arr2.push({"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()});
+	        localStorage.setItem("gen",JSON.stringify(arr2));
+
+			}
+			else {
+			  var arr=[{"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()}];
+	        localStorage.setItem("gen",JSON.stringify(arr));
+			}
+			}
+			
+
+	function eventletter(e){
+			   if(localStorage.getItem("letter")){
+			  var arr2=JSON.parse(localStorage.getItem("letter"));
+			   arr.push({"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()});
+	        localStorage.setItem("letter",JSON.stringify(arr));
+			
+			}
+			else {
+			  var arr=[{"typeofeventis":e.type,"targetofeventis":e.target,"dateofeventis":new Date()}];
+	        localStorage.setItem("letter",JSON.stringify(arr));
+			}
+	}
+
+			/////////
+			
+		 window.setInterval(function(){
+		  for(var i=0;i<localStorage.length;i++){
+		  //console.log(localStorage.key(i));
+		  //}
+		  
+                $.ajax({
+        "type": "POST",
+        "url": "ajax2.php",
+        "data": {"OBJECT":localStorage.getItem(localStorage.key(i))},
+        "success": function(response){
+            console.log(response);
+        }
+        });
+    }
+	localStorage.clear();
+ },4000);
+
+var rr=document.getElementById("Result");
+ rr.addEventListener('click',function () {
+            $.ajax({
+                "type": "GET",
+                "url": "ajax2.php",
+                "data": {"OBJECT": ""},
+                "success": function (response) {
+                    if (response) {
+                        var res = JSON.parse(response);
+                        var s = "<table><tr><td>Type</td><td>Target</td><td>Time</td></tr>";
+                        for (var i = 0; i < res.length; i++) {
+                            //console.log("I'm Here");
+                            s += "<tr><td>" + res[i]['type'] + "</td><td>" + res[i]['target'] + "</td><td>" + res[i]['date'] + "</td></tr>";
+                        }
+                        document.getElementById("asd").innerHTML = (s + "</table>");
+                        //$("#asd").html(s+"</table>");
+                    }
+                }
+            });
+ });
+	   
+	  
+</script>
+    
+    </body>
+</html>
